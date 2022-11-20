@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<script src="js/jquery-2.1.3.min.js"></script>
+<link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+<!-- latest -->
+<link href="https://unpkg.com/nes.icons@latest/css/nes-icons.min.css" rel="stylesheet" />
+<!-- specific version -->
+<link href="https://unpkg.com/nes.icons@<VERSION>/css/nes-icons.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./node_modules/nes.css/css/nes.min.css">
+<link rel="stylesheet" href="css/sample.css">
+<title>かけひきじゃんけん</title>
+</head>
+<body>
+<div class="wrapper">
+<header>
+  <h1>JYANKEN QUEST</h1>
+</header>
+
+<main>
+  <div class="buttle_field">
+    <div class="box_player">
+        <i class="nes-mario"></i>
+      <div class="title"><h2>ゆうしゃ は どうする？</h2></div>
+      
+      <ul class="alter">
+        <button id="gu" class="nes-btn" onclick="R_Click(0);">いしのつぶて</button>
+        <button id="cho" class="nes-btn" onclick="R_Click(1);">しざーはんず</button>
+        <button id="par" class="nes-btn" onclick="R_Click(2);">ごっどはんど</button>
+        <button id="king" class="nes-btn" onclick="R_Click(3);">おうのてっつい</button>
+        <button id="slv" class="nes-btn" onclick="R_Click(4);">どれいのはんげき</button>
+      </ul>
+    </div>
+    <div class="box_pc">
+      <i class="nes-kirby"></i>
+      <div>
+        <h2>モンスターのこうげきは</h2>
+        <div class = "nes-container" id="pc_hands"></div>
+      </div>
+    </div>
+  </div>
+  <div id="judgment">
+    <div>
+      <h2 id = "result"></h2>
+    </div>
+  </div>
+  
+  <div id="clear"></div>
+
+  <div class="reset">
+    <div id="retry"></div>
+  </div>
+  
+
+<div class="score">
+  <h3>かち<span id="win">0</span></h3>
+  <h3>まけ<span id="lose">0</span></h3>
+  <div class="box_HP">
+      <i class="nes-icon heart" id="heart1"></i>
+      <i class="nes-icon heart" id="heart2"></i>
+      <i class="nes-icon heart" id="heart3"></i>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="slider">
+    <div class="slider__inner">
+      <div class="slider__item">いしのつぶてはしざーはんずにかつことができる</div>
+      <div class="slider__item">しざーはんずはごっどはんどにかつことができる</div>
+      <div class="slider__item">ごっどはんどはいしのつぶてにかつことができる</div>
+      <div class="slider__item">おうのてっついはどれいのはんげきいがいにかつことができる</div>
+      <div class="slider__item">どれいのはんげきはおうのみにこうかをはっきする</div>
+    </div>
+  </div>
+</footer>
+</div>
+<script>
+//じゃんけん用のSCRIPTを書いてください
+const win=document.getElementById("win");
+const lose=document.getElementById("lose");
+const score = [0]
+let winCount=0;
+let loseCount=0;
+let totalScore = winCount-loseCount;
+
+function display(){
+  gu.disabled=true;
+  cho.disabled=true;
+  par.disabled=true;
+  king.disabled=true;
+  slv.disabled=true;
+  retry.disabled=false;
+}
+function start(){
+  gu.disabled=false;
+  cho.disabled=false;
+  par.disabled=false;
+  king.disabled=false;
+  slv.disabled=false;
+  retry.disabled=false;
+}
+
+
+function R_Click(p_janken_r) {
+        let janken = ['いしのつぶて','いしのつぶて','しざーはんず','しざーはんず','ごっどはんど','ごっどはんど','おうのてっつい','どれいのはんげき','どれいのはんげき','どれいのはんげき'];//"janken"のリストを作成します。
+        let janken_r = Math.floor( Math.random() * 10);//Math.random() で乱数を作ります
+        let p_janken = ['いしのつぶて','しざーはんず','ごっどはんど','おうのてっつい','どれいのはんげき'];//"プレイヤーのjanken"のリストを作成します。
+            //勝ち負けの判定機プログラムです
+            if (p_janken_r === 0 && janken_r === 0) {
+                Result_end = "あいうち";
+            } else if(p_janken_r === 0 && janken_r === 1) {
+                Result_end = "あいうち";
+            } else if(p_janken_r === 1 && janken_r === 2) {
+                Result_end = "あいうち";
+            } else if(p_janken_r === 1 && janken_r === 3) {
+                Result_end = "あいうち";
+            } else if(p_janken_r === 2 && janken_r === 4) {
+                Result_end = "あいうち";
+            } else if(p_janken_r === 2 && janken_r === 5) {
+                Result_end = "あいうち";
+            } else if(p_janken_r === 3 && janken_r === 6) {
+                Result_end = "あいうち";
+            } else if(p_janken_r === 4 && janken_r === 7) {
+                Result_end = "あいうち";
+            } else if(p_janken_r === 4 && janken_r === 8) {
+                Result_end = "あいうち";
+            } else if(p_janken_r === 4 && janken_r === 9) {
+                Result_end = "あいうち";
+            // グーでプレイヤー勝ちパターン
+            } else if(p_janken_r === 0 && janken_r === 2) {
+                Result_end = "YOU WIN!!";
+            } else if(p_janken_r === 0 && janken_r === 3) {
+                Result_end = "YOU WIN!!";
+            } else if(p_janken_r === 0 && janken_r === 7) {
+                Result_end = "YOU WIN!!";
+            } else if(p_janken_r === 0 && janken_r === 8) {
+                Result_end = "YOU WIN!!";   
+            } else if(p_janken_r === 0 && janken_r === 9) {
+                Result_end = "YOU WIN!!";
+            // チョキでプレイヤー勝ちパターン
+            } else if(p_janken_r === 1 && janken_r === 4) {
+                Result_end = "YOU WIN!!";
+            } else if(p_janken_r === 1 && janken_r === 5) {
+                Result_end = "YOU WIN!!";
+            } else if(p_janken_r === 1 && janken_r === 7) {
+                Result_end = "YOU WIN!!";
+            } else if(p_janken_r === 1 && janken_r === 8) {
+                Result_end = "YOU WIN!!";   
+            } else if(p_janken_r === 1 && janken_r === 9) {
+                Result_end = "YOU WIN!!";
+            // パーでプレイヤー勝ちパターン
+            } else if(p_janken_r === 2 && janken_r === 0) {
+                Result_end = "YOU WIN!!";
+            } else if(p_janken_r === 2 && janken_r === 1) {
+                Result_end = "YOU WIN!!";
+            } else if(p_janken_r === 2 && janken_r === 7) {
+                Result_end = "YOU WIN!!";
+            } else if(p_janken_r === 2 && janken_r === 8) {
+                Result_end = "YOU WIN!!";   
+            } else if(p_janken_r === 2 && janken_r === 9) {
+                Result_end = "YOU WIN!!";
+            // キングでプレイヤー勝ちパターン
+            } else if(p_janken_r === 3 && janken_r === 0) {
+                Result_end = "YOU WIN!!";
+            } else if(p_janken_r === 3 && janken_r === 1) {
+                Result_end = "YOU WIN!!";
+            } else if(p_janken_r === 3 && janken_r === 2) {
+                Result_end = "YOU WIN!!";
+            } else if(p_janken_r === 3 && janken_r === 3) {
+                Result_end = "YOU WIN!!";   
+            } else if(p_janken_r === 3 && janken_r === 4) {
+                Result_end = "YOU WIN!!";
+            } else if(p_janken_r === 3 && janken_r === 5) {
+                Result_end = "YOU WIN!!";
+            // スレイブでプレイヤー勝ちパターン
+            } else if(p_janken_r === 4 && janken_r === 6) {
+                Result_end = "YOU WIN!!";
+            // グーでプレイヤー負けパターン         
+            }else {
+                Result_end = "YOU LOSE...";
+            }
+
+            //結果を表示するためのプログラムです
+            document.getElementById("pc_hands").innerHTML = janken[janken_r];
+            document.getElementById("result").innerHTML = Result_end;
+            // 勝ち負け回数の表示
+            if (Result_end == "YOU WIN!!"){
+              winCount++;
+              win.textContent=winCount;
+            }  
+            else if(Result_end == "YOU LOSE..."){
+              loseCount++;
+              lose.textContent=loseCount;
+            } 
+            // 勝利条件
+            if(winCount == 3){
+              document.getElementById("clear").innerHTML = '<h1>' + "CLEAR!!" + '</h1>';
+              document.getElementById("retry").innerHTML = '<button class="nes-btn" id="reset">' + "もういちどトライする" + '</button>';
+              display()
+            }
+            // ゲームオーバー条件
+            if(loseCount == 1){
+              var list_element = document.getElementById("heart1");
+              list_element.remove();
+
+            }
+            if(loseCount == 2){
+              var list_element = document.getElementById("heart2");
+              list_element.remove();
+
+            }
+            if(loseCount == 3){
+              var list_element = document.getElementById("heart3");
+              list_element.remove();
+              document.getElementById("retry").innerHTML = '<button class="nes-btn" id="reset">' + "リベンジする" + '</button>';
+              display()
+            }
+
+}
+retry.addEventListener('click', function(){
+  location.reload();
+}
+)
+
+
+// 1-10までのランダムな整数を作る
+// const n = Math.ceil(Math.random() * 10);
+
+// 表示場所の指定
+var elem = document.getElementById("pc_hands");
+// 整数の値に応じて攻撃を表示
+// if(n ==1){
+//   elem.innerHTML = "<h2>いしのつぶて</h2>";
+// }else if(n == 2){
+//   elem.innerHTML = "<h2>いしのつぶて</h2>";
+// }else if(n == 3){
+//   elem.innerHTML = "<h2>しざーはんず</h2>";
+// }else if(n == 4){
+//   elem.innerHTML = "<h2>しざーはんず</h2>";
+//  }else if(n == 5){
+//   elem.innerHTML = "<h2>ごっどはんど</h2>";
+// }else if(n == 6){
+//   elem.innerHTML = "<h2>ごっどはんど</h2>"; 
+// }else if(n == 7){
+//   elem.innerHTML = "<h2>おうのてっつい</h2>";
+// }else if(n == 8){
+//   elem.innerHTML = "<h2>どれいのはんげき</h2>";
+// }else if(n == 9){
+//   elem.innerHTML = "<h2>どれいのはんげき</h2>";
+// }else if(n == 10){
+//   elem.innerHTML = "<h2>どれいのはんげき</h2>";
+// }
+
+// グー時の動作
+$("#gu_btn").on("click", function(){
+  if(n ==1){
+  elem.innerHTML = "<h2>いしのつぶて</h2>";
+}else if(n == 2){
+  elem.innerHTML = "<h2>いしのつぶて</h2>";
+}else if(n == 3){
+  elem.innerHTML = "<h2>しざーはんず</h2>";
+}else if(n == 4){
+  elem.innerHTML = "<h2>しざーはんず</h2>";
+ }else if(n == 5){
+  elem.innerHTML = "<h2>ごっどはんど</h2>";
+}else if(n == 6){
+  elem.innerHTML = "<h2>ごっどはんど</h2>"; 
+}else if(n == 7){
+  elem.innerHTML = "<h2>おうのてっつい</h2>";
+}else if(n == 8){
+  elem.innerHTML = "<h2>どれいのはんげき</h2>";
+}else if(n == 9){
+  elem.innerHTML = "<h2>どれいのはんげき</h2>";
+}else if(n == 10){
+  elem.innerHTML = "<h2>どれいのはんげき</h2>";
+}
+}
+)
+$("#result")
+
+// チョキ時の動作
+$("#cho_btn").on("click", function(){
+  if(n ==1){
+  elem.innerHTML = "<h2>いしのつぶて</h2>";
+}else if(n == 2){
+  elem.innerHTML = "<h2>いしのつぶて</h2>";
+}else if(n == 3){
+  elem.innerHTML = "<h2>しざーはんず</h2>";
+}else if(n == 4){
+  elem.innerHTML = "<h2>しざーはんず</h2>";
+ }else if(n == 5){
+  elem.innerHTML = "<h2>ごっどはんど</h2>";
+}else if(n == 6){
+  elem.innerHTML = "<h2>ごっどはんど</h2>"; 
+}else if(n == 7){
+  elem.innerHTML = "<h2>おうのてっつい</h2>";
+}else if(n == 8){
+  elem.innerHTML = "<h2>どれいのはんげき</h2>";
+}else if(n == 9){
+  elem.innerHTML = "<h2>どれいのはんげき</h2>";
+}else if(n == 10){
+  elem.innerHTML = "<h2>どれいのはんげき</h2>";
+}
+}
+)
+// パー時の動作
+$("#par_btn").on("click", function(){
+  if(n ==1){
+  elem.innerHTML = "<h2>いしのつぶて</h2>";
+}else if(n == 2){
+  elem.innerHTML = "<h2>いしのつぶて</h2>";
+}else if(n == 3){
+  elem.innerHTML = "<h2>しざーはんず</h2>";
+}else if(n == 4){
+  elem.innerHTML = "<h2>しざーはんず</h2>";
+ }else if(n == 5){
+  elem.innerHTML = "<h2>ごっどはんど</h2>";
+}else if(n == 6){
+  elem.innerHTML = "<h2>ごっどはんど</h2>"; 
+}else if(n == 7){
+  elem.innerHTML = "<h2>おうのてっつい</h2>";
+}else if(n == 8){
+  elem.innerHTML = "<h2>どれいのはんげき</h2>";
+}else if(n == 9){
+  elem.innerHTML = "<h2>どれいのはんげき</h2>";
+}else if(n == 10){
+  elem.innerHTML = "<h2>どれいのはんげき</h2>";
+}
+}
+)
+// king時の動作
+$("#king_btn").on("click", function(){
+  if(n ==1){
+  elem.innerHTML = "<h2>いしのつぶて</h2>";
+}else if(n == 2){
+  elem.innerHTML = "<h2>いしのつぶて</h2>";
+}else if(n == 3){
+  elem.innerHTML = "<h2>しざーはんず</h2>";
+}else if(n == 4){
+  elem.innerHTML = "<h2>しざーはんず</h2>";
+ }else if(n == 5){
+  elem.innerHTML = "<h2>ごっどはんど</h2>";
+}else if(n == 6){
+  elem.innerHTML = "<h2>ごっどはんど</h2>"; 
+}else if(n == 7){
+  elem.innerHTML = "<h2>おうのてっつい</h2>";
+}else if(n == 8){
+  elem.innerHTML = "<h2>どれいのはんげき</h2>";
+}else if(n == 9){
+  elem.innerHTML = "<h2>どれいのはんげき</h2>";
+}else if(n == 10){
+  elem.innerHTML = "<h2>どれいのはんげき</h2>";
+}
+}
+)
+// slv時の動作
+$("#slv_btn").on("click", function(){
+  if(n ==1){
+  elem.innerHTML = "<h2>いしのつぶて</h2>";
+}else if(n == 2){
+  elem.innerHTML = "<h2>いしのつぶて</h2>";
+}else if(n == 3){
+  elem.innerHTML = "<h2>しざーはんず</h2>";
+}else if(n == 4){
+  elem.innerHTML = "<h2>しざーはんず</h2>";
+ }else if(n == 5){
+  elem.innerHTML = "<h2>ごっどはんど</h2>";
+}else if(n == 6){
+  elem.innerHTML = "<h2>ごっどはんど</h2>"; 
+}else if(n == 7){
+  elem.innerHTML = "<h2>おうのてっつい</h2>";
+}else if(n == 8){
+  elem.innerHTML = "<h2>どれいのはんげき</h2>";
+}else if(n == 9){
+  elem.innerHTML = "<h2>どれいのはんげき</h2>";
+}else if(n == 10){
+  elem.innerHTML = "<h2>どれいのはんげき</h2>";
+}
+}
+)
+$(function(){
+    $('.slider__inner').each(function(){
+      var sliderWidth = $(this).width();
+ 
+      $(this).clone(true).insertBefore(this);
+      $(this).clone(true).insertAfter(this);
+ 
+      $('.slider').css('width', sliderWidth*3); // 親要素の横幅を子要素の３倍にする
+    });
+  });
+
+
+
+    
+    
+    
+    
+    
+    
+
+</script>
+</body>
+</html>
